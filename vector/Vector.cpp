@@ -7,28 +7,26 @@
 
 // TODO: finish the rest
 
- // @brief Creates an empty Vector with default capacity
- // @post m_length == 0, m_capacity == k_default_capacity
+// @brief Creates an empty Vector with default capacity
+// @post m_length == 0, m_capacity == k_default_capacity
 Vector::Vector()
     : m_data{new std::string[k_default_capacity]},
       m_length{0},
       m_capacity{k_default_capacity} {}
 
-
- // @brief Constructor with specified initial capacity
- // @param initial_capacity The initial capacity to reserve
- // @post m_length == 0, m_capacity == initial_capacity
- // @throws std::bad_alloc if memory allocation fails
+// @brief Constructor with specified initial capacity
+// @param initial_capacity The initial capacity to reserve
+// @post m_length == 0, m_capacity == initial_capacity
+// @throws std::bad_alloc if memory allocation fails
 Vector::Vector(size_t initial_capacity)
     : m_data{new std::string[initial_capacity]},
       m_length{0},
       m_capacity{initial_capacity} {}
 
-
- // @brief creates a deep copy of another Vector
- // @param other The Vector to be copied
- // @post Creates an independent copy with same length and capacity
- // @throws std::bad_alloc if memory allocation fails
+// @brief creates a deep copy of another Vector
+// @param other The Vector to be copied
+// @post Creates an independent copy with same length and capacity
+// @throws std::bad_alloc if memory allocation fails
 Vector::Vector(const Vector& other)
     : m_data{new std::string[other.m_capacity]},
       m_length{other.m_length},
@@ -38,10 +36,10 @@ Vector::Vector(const Vector& other)
   }
 }
 
- // @brief Transfers ownership of resources
- // @param other The Vector to move from
- // @post other is left in empty state 
- // @note noexcept guarantees exception safety
+// @brief Transfers ownership of resources
+// @param other The Vector to move from
+// @post other is left in empty state
+// @note noexcept guarantees exception safety
 Vector::Vector(Vector&& other) noexcept
     : m_data{other.m_data},
       m_length{other.m_length},
@@ -51,8 +49,8 @@ Vector::Vector(Vector&& other) noexcept
   other.m_capacity = 0;
 }
 
- // Frees dynamically allocated memory
- // @post All resources are released
+// Frees dynamically allocated memory
+// @post All resources are released
 Vector::~Vector() {
   delete[] m_data;
 }
@@ -93,19 +91,19 @@ Vector& Vector::operator=(Vector&& other) noexcept {
 }
 
 // @brief Returns the number of elements in the Vector
-// @return Current number of elements 
+// @return Current number of elements
 size_t Vector::Length() const {
   return m_length;
 }
 
 // @brief Returns the current capacity of the Vector
-// @return Current allocated capacity 
+// @return Current allocated capacity
 size_t Vector::Capacity() const {
   return m_capacity;
 }
 
- // @brief Returns a pointer to the array
- // @return Pointer to the dynamically allocated array 
+// @brief Returns a pointer to the array
+// @return Pointer to the dynamically allocated array
 std::string* Vector::Data() {
   return m_data;
 }
@@ -156,7 +154,7 @@ std::optional<std::string> Vector::PopBack() {
   return last_element;
 }
 
-// @brief Subscript operator 
+// @brief Subscript operator
 // @param index Position of element to access
 // @return Reference to the element at the specified position
 // @throws std::out_of_range if index >= m_length
@@ -166,7 +164,7 @@ std::string& Vector::operator[](size_t index) {
   }
   return m_data[index];
 }
-// @brief Subscript operator 
+// @brief Subscript operator
 // @param index Position of element to access
 // @return Const reference to the element at the specified position
 // @throws std::out_of_range if index >= m_length
@@ -176,7 +174,7 @@ const std::string& Vector::operator[](size_t index) const {
   }
   return m_data[index];
 }
-// @brief Bounds-checked element access 
+// @brief Bounds-checked element access
 // @param index Position of element to access
 // @return Reference to the element at the specified position
 // @throws std::out_of_range if index >= m_length
@@ -186,7 +184,7 @@ std::string& Vector::At(size_t index) {
   }
   return m_data[index];
 }
-// @brief Bounds-checked element access 
+// @brief Bounds-checked element access
 // @param index Position of element to access
 // @return Const reference to the element at the specified position
 // @throws std::out_of_range if index >= m_length
@@ -198,7 +196,7 @@ const std::string& Vector::At(size_t index) const {
 }
 
 // @brief Inserts an element at the specified position
-// @param index Position to insert at 
+// @param index Position to insert at
 // @param element The string to insert
 // @return The index where element was inserted
 // @post element is inserted at index, subsequent elements shifted right
@@ -225,7 +223,7 @@ size_t Vector::Insert(size_t index, const std::string& element) {
   return index;
 }
 // @brief Erases an element at the specified position
-// @param index Position to erase 
+// @param index Position to erase
 // @return The index of the element after the erased one
 // @post Element at index is removed, subsequent elements shifted left,
 // @throws std::out_of_range if index >= m_length

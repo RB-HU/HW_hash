@@ -1,6 +1,6 @@
+#include <unistd.h>
 #include <bit>
 #include <cerrno>
-#include <unistd.h>
 
 #include "./LinkedList.hpp"
 #include "./LinkedList_priv.hpp"
@@ -29,10 +29,10 @@ static void StubbedDelete(LLPayload_t payload) {
 
 // listener to reset the g_free_invocations to 0 before every test
 class LLTestSetupListener : public Catch::EventListenerBase {
-public:
+ public:
   using Catch::EventListenerBase::EventListenerBase;
 
-  void testCaseStarting(Catch::TestCaseInfo const &) override {
+  void testCaseStarting(Catch::TestCaseInfo const&) override {
     g_free_invocations = 0;
   }
 };
@@ -43,7 +43,7 @@ CATCH_REGISTER_LISTENER(LLTestSetupListener)
 
 TEST_CASE("Basic", "[Test_LinkedList]") {
   // Try creating a list.
-  LinkedList *llp = LinkedList_New();
+  LinkedList* llp = LinkedList_New();
   REQUIRE(llp != nullptr);
   REQUIRE(0 == LinkedList_NumElements(llp));
   REQUIRE(nullptr == llp->head);
@@ -57,7 +57,7 @@ TEST_CASE("Basic", "[Test_LinkedList]") {
 
 TEST_CASE("PushPop", "[Test_LinkedList]") {
   // Creating a list.
-  LinkedList *llp = LinkedList_New();
+  LinkedList* llp = LinkedList_New();
   REQUIRE(llp != nullptr);
   REQUIRE(0 == LinkedList_NumElements(llp));
   REQUIRE(nullptr == llp->head);
@@ -115,7 +115,7 @@ TEST_CASE("PushPop", "[Test_LinkedList]") {
 
 TEST_CASE("AppendSlice", "[Test_LinkedList]") {
   // Creating a list.
-  LinkedList *llp = LinkedList_New();
+  LinkedList* llp = LinkedList_New();
   REQUIRE(llp != nullptr);
   REQUIRE(0 == LinkedList_NumElements(llp));
   REQUIRE(nullptr == llp->head);
@@ -173,7 +173,7 @@ TEST_CASE("AppendSlice", "[Test_LinkedList]") {
 
 TEST_CASE("Iterator", "[Test_LinkedList]") {
   // Create a linked list.
-  LinkedList *llp = LinkedList_New();
+  LinkedList* llp = LinkedList_New();
 
   // Add some data to the list.
   LinkedList_Append(llp, k_five);
@@ -183,7 +183,7 @@ TEST_CASE("Iterator", "[Test_LinkedList]") {
   LinkedList_Append(llp, k_one);
 
   // Create the iterator.
-  LLIterator *lli = LLIterator_New(llp);
+  LLIterator* lli = LLIterator_New(llp);
   REQUIRE(lli != nullptr);
   REQUIRE(llp == lli->list);
   REQUIRE(llp->head == lli->node);
@@ -209,9 +209,9 @@ TEST_CASE("Iterator", "[Test_LinkedList]") {
 
   // The list contains 5 elements; try a delete from the front of the list.
   LLIterator_Rewind(lli);
-  LinkedListNode *prev = nullptr;
-  LinkedListNode *next = lli->node->next;
-  LinkedListNode *nextnext = lli->node->next->next;
+  LinkedListNode* prev = nullptr;
+  LinkedListNode* next = lli->node->next;
+  LinkedListNode* nextnext = lli->node->next->next;
   REQUIRE(LLIterator_Remove(lli, &StubbedDelete));
   REQUIRE(next == llp->head);
   REQUIRE(next == lli->node);
@@ -255,7 +255,7 @@ TEST_CASE("Iterator", "[Test_LinkedList]") {
   REQUIRE(nullptr == lli->node->next);
   REQUIRE(prev == lli->node);
   REQUIRE(nullptr == lli->node->prev);
-  REQUIRE(prev == llp->tail); // edge case found 17sp
+  REQUIRE(prev == llp->tail);  // edge case found 17sp
 
   // Remove the remaining node from the list.
   REQUIRE_FALSE(LLIterator_Remove(lli, &StubbedDelete));

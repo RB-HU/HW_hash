@@ -1,7 +1,7 @@
 #ifndef LINKEDLIST_PRIV_HPP_
 #define LINKEDLIST_PRIV_HPP_
 
-#include "./LinkedList.hpp" // for LinkedList and LLIterator
+#include "./LinkedList.hpp"  // for LinkedList and LLIterator
 
 // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 // Internal structures and helper functions for our LinkedList implementation.
@@ -19,9 +19,9 @@
 // A node contains next and prev pointers as well as a customer-supplied
 // payload pointer.
 typedef struct ll_node {
-  LLPayload_t payload;  // customer-supplied payload pointer
-  struct ll_node *next; // next node in list, or nullptr
-  struct ll_node *prev; // prev node in list, or nullptr
+  LLPayload_t payload;   // customer-supplied payload pointer
+  struct ll_node* next;  // next node in list, or nullptr
+  struct ll_node* prev;  // prev node in list, or nullptr
 } LinkedListNode;
 
 // The entire linked list.
@@ -30,9 +30,9 @@ typedef struct ll_node {
 // this is the associated definition.  This struct contains metadata
 // about the linked list.
 typedef struct ll {
-  size_t num_elements;  //  # elements in the list
-  LinkedListNode *head; // head of linked list, or nullptr if empty
-  LinkedListNode *tail; // tail of linked list, or nullptr if empty
+  size_t num_elements;   //  # elements in the list
+  LinkedListNode* head;  // head of linked list, or nullptr if empty
+  LinkedListNode* tail;  // tail of linked list, or nullptr if empty
 } LinkedList;
 
 // A linked list iterator.
@@ -40,8 +40,8 @@ typedef struct ll {
 // We expose the struct declaration in LinkedList.hpp, but not the definition,
 // similar to what we did above for the linked list itself.
 typedef struct ll_iter {
-  LinkedList *list;     // the list we're for
-  LinkedListNode *node; // the node we are at, or nullptr if broken
+  LinkedList* list;      // the list we're for
+  LinkedListNode* node;  // the node we are at, or nullptr if broken
 } LLIterator;
 
-#endif // LINKEDLIST_PRIV_HPP_
+#endif  // LINKEDLIST_PRIV_HPP_

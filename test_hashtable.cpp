@@ -22,8 +22,8 @@ static int g_free_invocations = 0;
 static constexpr int k_magic_num = static_cast<int>(0xDEADBEEF);
 
 static void VerifiedDelete(HTKeyValue_t payload) {
-  string *key = static_cast<string *>(payload.key);
-  Payload *value = static_cast<Payload *>(payload.value);
+  string* key = static_cast<string*>(payload.key);
+  Payload* value = static_cast<Payload*>(payload.value);
   REQUIRE(k_magic_num == value->magic_num);
   delete key;
   delete value;
@@ -35,8 +35,8 @@ static void InstrumentedDelete(HTKeyValue_t payload) {
 }
 
 static bool CompareKeys(HTKey_t lhs, HTKey_t rhs) {
-  string *lhs_str = static_cast<string *>(lhs);
-  string *rhs_str = static_cast<string *>(rhs);
+  string* lhs_str = static_cast<string*>(lhs);
+  string* rhs_str = static_cast<string*>(rhs);
   return *lhs_str == *rhs_str;
 }
 
@@ -44,10 +44,10 @@ static void NoOpDelete(HTKeyValue_t delete_me) {}
 
 // listener to reset the g_free_invocations to 0 before every test
 class HTTestSetupListener : public Catch::EventListenerBase {
-public:
+ public:
   using Catch::EventListenerBase::EventListenerBase;
 
-  void testCaseStarting(Catch::TestCaseInfo const &) override {
+  void testCaseStarting(Catch::TestCaseInfo const&) override {
     g_free_invocations = 0;
   }
 };
@@ -57,7 +57,7 @@ CATCH_REGISTER_LISTENER(HTTestSetupListener)
 // test cases
 
 TEST_CASE("New", "[Test_HashTable]") {
-  HashTable *ht = HashTable_New(3, CompareKeys);
+  HashTable* ht = HashTable_New(3, CompareKeys);
   REQUIRE(0 == ht->num_elements);
   REQUIRE(3 == ht->num_buckets);
 
@@ -69,7 +69,7 @@ TEST_CASE("New", "[Test_HashTable]") {
 }
 
 TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
-  HashTable *table = HashTable_New(10, CompareKeys);
+  HashTable* table = HashTable_New(10, CompareKeys);
   int i;
 
   // Allocate and insert a bunch of elements.
@@ -80,7 +80,7 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     // Create an element and do the insert.  Note that we promptly overwrite
     // these elements in the next section, so we don't bother
     // allocating/freeing memory for these items.
-    Payload *np;
+    Payload* np;
     HTKeyValue_t oldkv{};
     HTKeyValue_t newkv{hash, key, static_cast<HTValue_t>(&newkv)};
     REQUIRE_FALSE(HashTable_Insert(table, newkv, &oldkv));
@@ -93,17 +93,17 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     REQUIRE(HashTable_Insert(table, newkv, &oldkv));
     REQUIRE(hash == oldkv.hash);
     REQUIRE(key == oldkv.key);
-    REQUIRE(i == stoi(*static_cast<string *>(oldkv.key)));
+    REQUIRE(i == stoi(*static_cast<string*>(oldkv.key)));
     REQUIRE(static_cast<HTValue_t>(&newkv) == oldkv.value);
 
     // Lookup the newly-inserted value.
-    oldkv.hash = -1;     // reinitialize "oldkv" so we can verify it was
-    oldkv.key = nullptr; // set by Find.
+    oldkv.hash = -1;      // reinitialize "oldkv" so we can verify it was
+    oldkv.key = nullptr;  // set by Find.
     oldkv.value = nullptr;
     REQUIRE(HashTable_Find(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
     REQUIRE(key == oldkv.key);
-    REQUIRE(i == stoi(*static_cast<string *>(oldkv.key)));
+    REQUIRE(i == stoi(*static_cast<string*>(oldkv.key)));
     REQUIRE(static_cast<HTValue_t>(np) == oldkv.value);
 
     // Lookup and remove a value that doesn't exist in the table.
@@ -117,7 +117,7 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     REQUIRE(HashTable_Remove(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
     REQUIRE(key == oldkv.key);
-    REQUIRE(i == stoi(*static_cast<string *>(oldkv.key)));
+    REQUIRE(i == stoi(*static_cast<string*>(oldkv.key)));
     REQUIRE(static_cast<HTValue_t>(np) == oldkv.value);
     REQUIRE(i == HashTable_NumElements(table));
 
@@ -132,7 +132,7 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     const HTHash_t hash = static_cast<HTHash_t>(i);
     HTKeyValue_t oldkv;
 
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
 
     REQUIRE(HashTable_Remove(table, i, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
@@ -151,7 +151,7 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     const HTHash_t hash = static_cast<HTHash_t>(i);
     HTKeyValue_t oldkv;
 
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
 
     REQUIRE(HashTable_Remove(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
@@ -169,8 +169,8 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
   // insert some values that will have hash collisions but different keys
   // than ones inserted later
   HTHash_t hash = static_cast<HTHash_t>(0);
-  string *key = new string("#DIV/0!");
-  Payload *value = new Payload{k_magic_num, 0};
+  string* key = new string("#DIV/0!");
+  Payload* value = new Payload{k_magic_num, 0};
   HTKeyValue_t newkv{hash, key, value};
   HTKeyValue_t oldkv{};
 
@@ -214,10 +214,10 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
   for (i = 0; i < 25; i++) {
     const HTHash_t hash = static_cast<HTHash_t>(i);
 
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
 
     // Do the insert.
-    Payload *np = new Payload{k_magic_num, i};
+    Payload* np = new Payload{k_magic_num, i};
     HTKeyValue_t oldkv{};
     const HTKeyValue_t newkv{hash, key, np};
     REQUIRE_FALSE(HashTable_Insert(table, newkv, &oldkv));
@@ -235,7 +235,7 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
     const HTHash_t hash = static_cast<HTHash_t>(i);
     HTKeyValue_t oldkv;
 
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
 
     REQUIRE(HashTable_Remove(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
@@ -253,11 +253,11 @@ TEST_CASE("InsertFindRemove", "[Test_HashTable]") {
 }
 
 TEST_CASE("Iterator", "[Test_HashTable]") {
-  HashTable *table = HashTable_New(300, CompareKeys);
+  HashTable* table = HashTable_New(300, CompareKeys);
   HTKeyValue_t oldkv{};
 
   // Test using an iterator on an empty table.
-  HTIterator *it = HTIterator_New(table);
+  HTIterator* it = HTIterator_New(table);
   REQUIRE_FALSE(HTIterator_IsValid(it));
   REQUIRE_FALSE(HTIterator_Get(it, &oldkv));
   HTIterator_Delete(it);
@@ -267,10 +267,10 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
   for (int i = 0; i < 100; i++) {
     const HTHash_t hash = static_cast<HTHash_t>(i);
 
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
 
     // Create an element and do the insert.
-    Payload *np = new Payload{k_magic_num, i};
+    Payload* np = new Payload{k_magic_num, i};
     HTKeyValue_t oldkv{};
     const HTKeyValue_t newkv{hash, key, np};
     REQUIRE_FALSE(HashTable_Insert(table, newkv, &oldkv));
@@ -279,9 +279,9 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
   REQUIRE(HTIterator_IsValid(it));
 
   // Now iterate through the table, verifying each value is found exactly once.
-  std::array<int, 100> num_times_seen = {0}; // array of 100 0's
+  std::array<int, 100> num_times_seen = {0};  // array of 100 0's
   for (int i = 0; i < 100; i++) {
-    Payload *op = nullptr;
+    Payload* op = nullptr;
 
     REQUIRE(HTIterator_IsValid(it));
     REQUIRE(HTIterator_Get(it, &oldkv));
@@ -293,7 +293,7 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
     num_times_seen.at(hash)++;
 
     // Verify that this is the value we previously inserted.
-    op = static_cast<Payload *>(oldkv.value);
+    op = static_cast<Payload*>(oldkv.value);
     REQUIRE(k_magic_num == op->magic_num);
     REQUIRE(hash == op->payload_num);
 
@@ -308,7 +308,7 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
     }
   }
   for (int i = 0; i < 100; i++) {
-    REQUIRE(1 == num_times_seen.at(i)); // verify each was seen exactly once.
+    REQUIRE(1 == num_times_seen.at(i));  // verify each was seen exactly once.
   }
 
   REQUIRE_FALSE(HTIterator_Next(it));
@@ -325,8 +325,8 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
 
     if (i % 3 == 0) {
       const size_t oldnumelements = HashTable_NumElements(table);
-      Payload *op = static_cast<Payload *>(oldkv.value);
-      const string *ok = static_cast<string *>(oldkv.key);
+      Payload* op = static_cast<Payload*>(oldkv.value);
+      const string* ok = static_cast<string*>(oldkv.key);
       REQUIRE(htkey == op->payload_num);
       num_times_seen.at(htkey)++;
 
@@ -378,7 +378,7 @@ TEST_CASE("Iterator", "[Test_HashTable]") {
 }
 
 TEST_CASE("Resize", "[Test_HashTable]") {
-  HashTable *table = HashTable_New(2, CompareKeys);
+  HashTable* table = HashTable_New(2, CompareKeys);
   REQUIRE(2 == table->num_buckets);
 
   HTKeyValue_t newval;
@@ -396,8 +396,8 @@ TEST_CASE("Resize", "[Test_HashTable]") {
     REQUIRE(newval.key == oldkv.key);
     REQUIRE(newval.value == oldkv.value);
 
-    oldkv.hash = -1;     // reinitialize "oldkv" so we can verify it was
-    oldkv.key = nullptr; // set by HashTable_Find.
+    oldkv.hash = -1;      // reinitialize "oldkv" so we can verify it was
+    oldkv.key = nullptr;  // set by HashTable_Find.
     oldkv.value = nullptr;
     REQUIRE(HashTable_Find(table, newval.hash, newval.key, &oldkv));
     REQUIRE(newval.hash == oldkv.hash);
@@ -413,19 +413,19 @@ TEST_CASE("Resize", "[Test_HashTable]") {
   // stays the same.
   for (int i = 0; i < 7; ++i) {
     const HTHash_t hash = i;
-    string *key = new string(to_string(i));
+    string* key = new string(to_string(i));
     HTValue_t value = reinterpret_cast<HTValue_t>(hash);
 
-    oldkv.hash = -1;     // reinitialize "oldkv" so we can verify it was
-    oldkv.key = nullptr; // set by HashTable_Find.
+    oldkv.hash = -1;      // reinitialize "oldkv" so we can verify it was
+    oldkv.key = nullptr;  // set by HashTable_Find.
     oldkv.value = nullptr;
     REQUIRE(HashTable_Find(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
     REQUIRE(CompareKeys(key, oldkv.key));
     REQUIRE(value == oldkv.value);
 
-    oldkv.hash = -1;     // reinitialize "oldkv" so we can verify it was
-    oldkv.key = nullptr; // set by HashTable_Find.
+    oldkv.hash = -1;      // reinitialize "oldkv" so we can verify it was
+    oldkv.key = nullptr;  // set by HashTable_Find.
     oldkv.value = nullptr;
     REQUIRE(HashTable_Remove(table, hash, key, &oldkv));
     REQUIRE(hash == oldkv.hash);
@@ -436,7 +436,7 @@ TEST_CASE("Resize", "[Test_HashTable]") {
     REQUIRE_FALSE(HashTable_Find(table, hash, key, &oldkv));
     REQUIRE_FALSE(HashTable_Remove(table, hash, key, &oldkv));
 
-    delete static_cast<string *>(oldkv.key);
+    delete static_cast<string*>(oldkv.key);
 
     delete key;
   }

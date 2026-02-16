@@ -1,8 +1,8 @@
 #ifndef HASHTABLE_HPP_
 #define HASHTABLE_HPP_
 
-#include <cstddef> // for size_t
-#include <cstdint> // for uint64_t, etc.
+#include <cstddef>  // for size_t
+#include <cstdint>  // for uint64_t, etc.
 
 ///////////////////////////////////////////////////////////////////////////////
 // A HashTable is a automatically-resizing chained hash table.
@@ -33,13 +33,13 @@ typedef struct ht HashTable;
 // data can be stored in the HashTable, by casting it to the HTValue_t
 // type.  Otherwise, a pointer to the client's data is maintained in
 // the table. Similar is done with the hash table key.
-typedef uint64_t HTHash_t; // hash table hash type
-typedef void *HTKey_t;     // hash table key type
-typedef void *HTValue_t;   // hash table value type
+typedef uint64_t HTHash_t;  // hash table hash type
+typedef void* HTKey_t;      // hash table key type
+typedef void* HTValue_t;    // hash table value type
 typedef struct {
   HTHash_t hash;
-  HTKey_t key;     // the key in the (key,value) pair
-  HTValue_t value; // the value in the (key,value) pair
+  HTKey_t key;      // the key in the (key,value) pair
+  HTValue_t value;  // the value in the (key,value) pair
 } HTKeyValue_t;
 
 // When freeing a HashTable, customers need to pass a pointer to a function
@@ -68,7 +68,7 @@ typedef bool (*KeyCmpFnPtr)(HTKey_t, HTKey_t);
 // Returns:
 // - a nicely distributed 64-bit hash value suitable for
 //   use in a HTKeyValue_t.
-HTHash_t FNVHash64(unsigned char *buffer, int len);
+HTHash_t FNVHash64(unsigned char* buffer, int len);
 
 // Allocate and return a new HashTable.
 //
@@ -79,7 +79,7 @@ HTHash_t FNVHash64(unsigned char *buffer, int len);
 //   see above for details.
 //
 // Returns nullptr on error, non-nullptr on success.
-HashTable *HashTable_New(size_t num_buckets, KeyCmpFnPtr key_compare_function);
+HashTable* HashTable_New(size_t num_buckets, KeyCmpFnPtr key_compare_function);
 
 // Deallocates a HashTable and its entries.
 //
@@ -89,7 +89,7 @@ HashTable *HashTable_New(size_t num_buckets, KeyCmpFnPtr key_compare_function);
 //
 // - kv_free_function: this argument is a pointer to a key-value
 //   freeing function; see above for details.
-void HashTable_Delete(HashTable *table, KeyValueFreeFnPtr kv_free_function);
+void HashTable_Delete(HashTable* table, KeyValueFreeFnPtr kv_free_function);
 
 // Figure out the number of elements in the hash table.
 //
@@ -100,7 +100,7 @@ void HashTable_Delete(HashTable *table, KeyValueFreeFnPtr kv_free_function);
 // Returns:
 //
 // - table size (>=0); note that this is an unsigned 64-bit integer.
-size_t HashTable_NumElements(HashTable *table);
+size_t HashTable_NumElements(HashTable* table);
 
 // Inserts a (key,value) pair into the HashTable.
 //
@@ -120,8 +120,9 @@ size_t HashTable_NumElements(HashTable *table);
 //    with the same key was replaced and returned through
 //    the oldkeyval return parameter.  In this case, the caller assumes
 //    ownership of oldkeyvalue.
-bool HashTable_Insert(HashTable *table, HTKeyValue_t newkeyvalue,
-                      HTKeyValue_t *oldkeyvalue);
+bool HashTable_Insert(HashTable* table,
+                      HTKeyValue_t newkeyvalue,
+                      HTKeyValue_t* oldkeyvalue);
 
 // Looks up a key in the HashTable, and if it is present, returns the
 // (key,value) associated with it.
@@ -139,8 +140,10 @@ bool HashTable_Insert(HashTable *table, HTKeyValue_t newkeyvalue,
 //  - false: if the key wasn't found in the HashTable.
 //  - true: if the key was found, and therefore the associated (key,value)
 //    was returned to the caller via that keyvalue return parameter.
-bool HashTable_Find(HashTable *table, HTHash_t hash, HTKey_t key,
-                    HTKeyValue_t *keyvalue);
+bool HashTable_Find(HashTable* table,
+                    HTHash_t hash,
+                    HTKey_t key,
+                    HTKeyValue_t* keyvalue);
 
 // Removes a (key,value) from the HashTable and returns it to the
 // caller.
@@ -161,8 +164,10 @@ bool HashTable_Find(HashTable *table, HTHash_t hash, HTKey_t key,
 //    (key,value) was returned to the caller via that keyvalue return
 //    parameter, and (b) that (key,value) was removed from the
 //    HashTable.
-bool HashTable_Remove(HashTable *table, HTHash_t hash, HTKey_t key,
-                      HTKeyValue_t *keyvalue);
+bool HashTable_Remove(HashTable* table,
+                      HTHash_t hash,
+                      HTKey_t key,
+                      HTKeyValue_t* keyvalue);
 
 ///////////////////////////////////////////////////////////////////////////////
 // HashTable iterator
@@ -174,7 +179,7 @@ bool HashTable_Remove(HashTable *table, HTHash_t hash, HTKey_t key,
 // is visited exactly once.  Also, if the customer uses a HashTable function
 // to mutate the hash table, any existing iterators become undefined (ie,
 // dangerous to use; arbitrary memory corruption can occur).
-typedef struct ht_it HTIterator; // same trick to hide implementation.
+typedef struct ht_it HTIterator;  // same trick to hide implementation.
 
 // Manufacture an iterator for the table.  If there are
 // elements in the hash table, the iterator is initialized
@@ -187,14 +192,14 @@ typedef struct ht_it HTIterator; // same trick to hide implementation.
 // Returns:
 // - the newly-allocated iterator, which may be invalid or "past the end"
 //   if the table cannot be iterated through (eg, empty).
-HTIterator *HTIterator_New(HashTable *table);
+HTIterator* HTIterator_New(HashTable* table);
 
 // When you're done with a hash table iterator, you must deallocate it
 // by calling this function.
 //
 // Arguments:
 // - iter: the iterator to de-allocate.  Don't use it afterwards.
-void HTIterator_Delete(HTIterator *iter);
+void HTIterator_Delete(HTIterator* iter);
 
 // Tests to see whether the iterator is pointing at a valid element.
 //
@@ -206,7 +211,7 @@ void HTIterator_Delete(HTIterator *iter);
 //   the table is non-empty).
 // - false: if iter is past the end of the table.
 //
-bool HTIterator_IsValid(HTIterator *iter);
+bool HTIterator_IsValid(HTIterator* iter);
 
 // Advance the iterator to the next element of the table.
 //
@@ -217,7 +222,7 @@ bool HTIterator_IsValid(HTIterator *iter);
 // - true: if the iterator has been advanced to the next element.
 // - false: if the iterator cannot be advanced (eg, it's "past the
 //   end").  The iterator is no longer valid at this point.
-bool HTIterator_Next(HTIterator *iter);
+bool HTIterator_Next(HTIterator* iter);
 
 // Returns a copy of the (key,value) that the iterator is currently
 // pointing at.
@@ -230,7 +235,7 @@ bool HTIterator_Next(HTIterator *iter);
 // Returns:
 // - false: if the iterator is not valid or the table is empty.
 // - true: success.
-bool HTIterator_Get(HTIterator *iter, HTKeyValue_t *keyvalue);
+bool HTIterator_Get(HTIterator* iter, HTKeyValue_t* keyvalue);
 
 // Returns a copy of (key,value) that the iterator is currently
 // pointing at, and removes that (key,value) from the
@@ -249,6 +254,6 @@ bool HTIterator_Get(HTIterator *iter, HTKeyValue_t *keyvalue);
 //   element, the iterator has been advanced to it.  If the
 //   iterator is past the end of the table, the iterator is
 //   now invalid.
-bool HTIterator_Remove(HTIterator *iter, HTKeyValue_t *keyvalue);
+bool HTIterator_Remove(HTIterator* iter, HTKeyValue_t* keyvalue);
 
-#endif // HASHTABLE_HPP_
+#endif  // HASHTABLE_HPP_

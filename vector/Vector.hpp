@@ -6,9 +6,6 @@
 #include <stdexcept>
 #include <string>
 
-
-
-
 // Vector is a class that represents
 // an ordered list of strings as a dynamically resizable array.
 //
@@ -154,4 +151,4 @@ class Vector {
 
   static constexpr size_t k_default_capacity = 10;
 };
-#endif // VECTOR_HPP_
+#endif  // VECTOR_HPP_

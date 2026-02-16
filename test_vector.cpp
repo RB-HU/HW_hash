@@ -1,7 +1,7 @@
+#include <cstdlib>   // include's C's <stdlib.h>
+#include <cstring>   // Does not do our cstring.h this includes C's <string.h>
+#include <iostream>  // for C++ printing
 #include "./catch.hpp"
-#include <cstring>  // Does not do our cstring.h this includes C's <string.h>
-#include <cstdlib>  // include's C's <stdlib.h>
-#include <iostream> // for C++ printing
 
 #include "./Vector.hpp"
 
@@ -15,7 +15,7 @@ TEST_CASE("basic ctor", "[ctor]") {
   REQUIRE(v.Capacity() == 10);
   REQUIRE(v.Length() == 0);
   REQUIRE(v.Data() != nullptr);
-  
+
   Vector v2(5);
   REQUIRE(v2.Capacity() == 5);
   REQUIRE(v2.Length() == 0);
@@ -1512,7 +1512,6 @@ TEST_CASE("basic copy constructor", "[copy_ctor]") {
 }
 
 TEST_CASE("complex copy constructor", "[copy_ctor]") {
-  
   Vector original;
   for (size_t i = 0; i < 100; ++i) {
     original.PushBack("Item" + std::to_string(i));
@@ -1568,7 +1567,7 @@ TEST_CASE("complex copy constructor", "[copy_ctor]") {
   Vector large_copy(large_vec);
   REQUIRE(large_copy.Data() != large_vec.Data());
   REQUIRE(large_copy.Length() == large_vec.Length());
-  
+
   bool identical = true;
   for (size_t i = 0; i < large_vec.Length(); ++i) {
     if (large_copy.At(i) != large_vec.At(i)) {
@@ -1591,7 +1590,7 @@ TEST_CASE("complex copy constructor", "[copy_ctor]") {
   REQUIRE(large_preallocated_copy.Capacity() == 200);
   identical = true;
   for (size_t i = 0; i < 150; ++i) {
-    if (large_preallocated_copy.At(i) != large_preallocated.At(i)){
+    if (large_preallocated_copy.At(i) != large_preallocated.At(i)) {
       identical = false;
     }
   }
@@ -1645,12 +1644,12 @@ TEST_CASE("basic erase", "[erase]") {
   v.PushBack("gamma");
   v.PushBack("delta");
 
-  returned_index = v.Erase(2); // Erase "gamma"
+  returned_index = v.Erase(2);  // Erase "gamma"
   REQUIRE(returned_index == 2);
   REQUIRE(v.Length() == 3);
   REQUIRE(v.At(2) == "delta");
 
-  returned_index = v.Erase(1); // Erase "beta"
+  returned_index = v.Erase(1);  // Erase "beta"
   REQUIRE(returned_index == 1);
   REQUIRE(v.Length() == 2);
   REQUIRE(v.At(0) == "alpha");
@@ -1662,12 +1661,12 @@ TEST_CASE("basic erase", "[erase]") {
   REQUIRE_THROWS(v.Erase(100));
 
   // Erase all elements one by one
-  returned_index = v.Erase(0); // Erase "alpha"
+  returned_index = v.Erase(0);  // Erase "alpha"
   REQUIRE(returned_index == 0);
   REQUIRE(v.Length() == 1);
   REQUIRE(v.At(0) == "delta");
 
-  returned_index = v.Erase(0); // Erase "delta"
+  returned_index = v.Erase(0);  // Erase "delta"
   REQUIRE(v.Length() == 0);
   REQUIRE_THROWS(v.Erase(0));
 
@@ -1690,11 +1689,11 @@ TEST_CASE("basic erase", "[erase]") {
   REQUIRE(preallocated.Length() == 2);
   REQUIRE(preallocated.At(0) == "alpha");
   REQUIRE(preallocated.At(1) == "gamma");
-  REQUIRE_THROWS(preallocated.At(2)); // out of bounds  
+  REQUIRE_THROWS(preallocated.At(2));  // out of bounds
 
   // Erase last element
   returned_index = preallocated.Erase(1);  // remove "gamma"
-  REQUIRE(returned_index == 0); 
+  REQUIRE(returned_index == 0);
   REQUIRE(preallocated.Length() == 1);
   REQUIRE(preallocated.At(0) == "alpha");
 
@@ -1705,7 +1704,6 @@ TEST_CASE("basic erase", "[erase]") {
 }
 
 TEST_CASE("complex erase", "[erase]") {
-  
   Vector v;
   for (int i = 0; i < 10; i++) {
     std::string item = "Item" + std::to_string(i);
@@ -1780,7 +1778,7 @@ TEST_CASE("complex erase", "[erase]") {
   v2.PushBack("Extra2");
   REQUIRE(v2.Length() == 12);
 
-  v2.PopBack(); // Removes "Extra2"
+  v2.PopBack();  // Removes "Extra2"
   REQUIRE(v2.Length() == 11);
 
   REQUIRE(v2.Erase(5) == 5);  // Removes "EdgeItem5"
@@ -1792,13 +1790,15 @@ TEST_CASE("complex erase", "[erase]") {
   REQUIRE(v2.Erase(2) == 2);  // Removes "EdgeItem2"
   REQUIRE(v2.Length() == 10);
 
-  v2.PopBack(); // Removes "Extra3"
+  v2.PopBack();  // Removes "Extra3"
   REQUIRE(v2.Length() == 9);
 
   REQUIRE(v2.Erase(0) == 0);  // Removes "EdgeItem0"
   REQUIRE(v2.Length() == 8);
 
-  std::vector<std::string> expected_values = {"EdgeItem1", "EdgeItem3", "EdgeItem4", "EdgeItem6", "EdgeItem7", "EdgeItem8", "EdgeItem9", "Extra1"};
+  std::vector<std::string> expected_values = {
+      "EdgeItem1", "EdgeItem3", "EdgeItem4", "EdgeItem6",
+      "EdgeItem7", "EdgeItem8", "EdgeItem9", "Extra1"};
   REQUIRE(v2.Length() == expected_values.size());
   for (size_t i = 0; i < expected_values.size(); ++i) {
     REQUIRE(v2.At(i) == expected_values[i]);
@@ -1824,7 +1824,7 @@ TEST_CASE("complex erase", "[erase]") {
 
   // Erase the last element
   returned_index = v3.Erase(v3.Length() - 1);
-  REQUIRE(returned_index == 598 - 1); 
+  REQUIRE(returned_index == 598 - 1);
   REQUIRE(v3.Length() == 598);
   REQUIRE(v3.Capacity() == 1000);
 
@@ -1854,7 +1854,7 @@ TEST_CASE("basic reserve", "[reserve]") {
   REQUIRE(v.Capacity() == 20);
   REQUIRE(v.Length() == 1);
   REQUIRE(v.Data() != nullptr);
-  
+
   v.PushBack("toes");
   REQUIRE(v.Capacity() == 20);
   REQUIRE(v.Length() == 2);
@@ -1878,7 +1878,7 @@ TEST_CASE("complex reserve", "[reserve]") {
 
   v.PushBack("fish");
   v.PushBack("fishball");
-  
+
   REQUIRE(v.Capacity() == 4);
   REQUIRE(v.Length() == 2);
   REQUIRE(v.Data() != nullptr);
@@ -1925,7 +1925,6 @@ TEST_CASE("complex reserve", "[reserve]") {
   REQUIRE(v.Capacity() == 14);
   REQUIRE(v.Length() == 8);
   REQUIRE(v.Data() != nullptr);
-
 
   Vector v2;
   REQUIRE(v2.Capacity() == 10);
@@ -2007,7 +2006,7 @@ TEST_CASE("complex reserve", "[reserve]") {
 TEST_CASE("basic insert", "[insert]") {
   Vector v;
   size_t index;
-  
+
   REQUIRE(v.Capacity() == 10);
   REQUIRE(v.Length() == 0);
   REQUIRE(v.Data() != nullptr);
@@ -2095,7 +2094,6 @@ TEST_CASE("basic insert", "[insert]") {
   REQUIRE(v2.Data()[5] == "candlenut");
   REQUIRE(v2.Data()[6] == "hazelnut");
   REQUIRE(v2.Data()[7] == "applenut");
-  
 
   index = v2.Insert(8, "doughnut");
   REQUIRE(index == 8);
@@ -2146,9 +2144,7 @@ TEST_CASE("basic insert", "[insert]") {
   for (int i = 0; i < 3001; ++i) {
     REQUIRE(v3.Data()[i] == "thing " + std::to_string(i));
   }
-
 }
-
 
 TEST_CASE("complex insert", "[insert]") {
   Vector v;
@@ -2173,14 +2169,14 @@ TEST_CASE("complex insert", "[insert]") {
   for (int i = 0; i < 10; ++i) {
     REQUIRE(v.Data()[i] == "count " + std::to_string(i));
   }
-  
+
   index = v.Insert(10, "count 10");
   REQUIRE(index == 10);
   REQUIRE(v.Capacity() == 20);
   REQUIRE(v.Length() == 11);
   REQUIRE(v.Data() != nullptr);
   for (int i = 0; i < 11; ++i) {
-    REQUIRE(v.Data()[i] =="count " + std::to_string(i));
+    REQUIRE(v.Data()[i] == "count " + std::to_string(i));
   }
 
   REQUIRE_THROWS_AS(v.Insert(12, "12 out of bounds"), out_of_range);
@@ -2188,7 +2184,6 @@ TEST_CASE("complex insert", "[insert]") {
   REQUIRE_THROWS_AS(v.Insert(24, "24 out of bounds"), out_of_range);
   REQUIRE_THROWS_AS(v.Insert(2824, "2824 out of bounds"), out_of_range);
 
-  
   Vector v2(1);
   REQUIRE(v2.Capacity() == 1);
   REQUIRE(v2.Length() == 0);
@@ -2208,7 +2203,6 @@ TEST_CASE("complex insert", "[insert]") {
   REQUIRE(v2.Data()[732] == "boom boom 732");
   REQUIRE(v2.Data()[999] == "boom boom 999");
 
-
   Vector v3(13);
   REQUIRE(v3.Capacity() == 13);
   REQUIRE(v3.Length() == 0);
@@ -2216,8 +2210,8 @@ TEST_CASE("complex insert", "[insert]") {
 
   for (int i = 0; i < 13; ++i) {
     index = v3.Insert(0, "choom choom " + std::to_string(i));
-    REQUIRE(index == 0); 
-  } 
+    REQUIRE(index == 0);
+  }
   REQUIRE(v3.Capacity() == 13);
   REQUIRE(v3.Length() == 13);
 
@@ -2227,7 +2221,7 @@ TEST_CASE("complex insert", "[insert]") {
 
   for (int i = 14; i < 571; ++i) {
     index = v3.Insert(0, "choom choom " + std::to_string(i));
-    REQUIRE(index == 0); 
+    REQUIRE(index == 0);
   }
   REQUIRE(v3.Capacity() == 832);
   REQUIRE(v3.Length() == 571);
@@ -2260,7 +2254,7 @@ TEST_CASE("complex insert", "[insert]") {
   v4.Insert(4, "elem 4");
   REQUIRE(v4.Capacity() == 8);
   REQUIRE(v4.Length() == 5);
-  
+
   v4.Insert(5, "elem 5");
   v4.Insert(6, "elem 6");
   v4.Insert(7, "elem 7");
@@ -2273,11 +2267,10 @@ TEST_CASE("complex insert", "[insert]") {
   REQUIRE_THROWS_AS(v4.Insert(10, "10 out of bounds"), out_of_range);
   REQUIRE_THROWS_AS(v4.Insert(14, "14 out of bounds"), out_of_range);
 
-  
   Vector v5(5);
   REQUIRE(v5.Insert(0, "num 0") == 0);
   REQUIRE(v5.Insert(1, "num 1") == 1);
-  REQUIRE(v5.Insert(2, "num 3") == 2); 
+  REQUIRE(v5.Insert(2, "num 3") == 2);
   REQUIRE(v5.Insert(3, "num 5") == 3);
   REQUIRE(v5.Insert(4, "num 8") == 4);
 
@@ -2286,7 +2279,7 @@ TEST_CASE("complex insert", "[insert]") {
 
   REQUIRE(v5.Insert(3, "num 4") == 3);
   REQUIRE(v5.Insert(5, "num 7") == 5);
-  REQUIRE(v5.Insert(5, "num 6") == 5); 
+  REQUIRE(v5.Insert(5, "num 6") == 5);
   REQUIRE(v5.Insert(2, "num 2") == 2);
 
   REQUIRE(v5.Capacity() == 10);
@@ -2297,9 +2290,9 @@ TEST_CASE("complex insert", "[insert]") {
 
   REQUIRE(v5.Insert(9, "num 12") == 9);
   REQUIRE(v5.Insert(9, "num 9") == 9);
-  REQUIRE(v5.Insert(10, "num 11") == 10); 
+  REQUIRE(v5.Insert(10, "num 11") == 10);
   REQUIRE(v5.Insert(10, "num 10") == 10);
-  REQUIRE(v5.Insert(0, "num -2") == 0); 
+  REQUIRE(v5.Insert(0, "num -2") == 0);
   REQUIRE(v5.Insert(1, "num -1") == 1);
 
   REQUIRE(v5.Capacity() == 20);
