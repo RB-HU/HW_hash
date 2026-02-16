@@ -10,7 +10,7 @@
 //
 // For simplicity, we are having the vector only store strings
 class Vector {
- public:
+public:
   // constructors:
 
   // 0-arg constructor.
@@ -27,18 +27,18 @@ class Vector {
   // Takes in another Vector by const-reference
   // contructs a new Vector as an independent copy of the
   // passed in Vector
-  Vector(const Vector& other);
+  Vector(const Vector &other);
 
   // Move constructor
   // Takes in another Vector vector by R-reference
   // takes ownership of the data of other
-  Vector(Vector&& other) noexcept;
+  Vector(Vector &&other) noexcept;
 
   // assignment op
-  Vector& operator=(const Vector& other);
+  Vector &operator=(const Vector &other);
 
   // move assignment op
-  Vector& operator=(Vector&& other) noexcept;
+  Vector &operator=(Vector &&other) noexcept;
 
   // Destructor
   // Deallocates any allocated resources
@@ -49,7 +49,7 @@ class Vector {
 
   // returns access to the underlying dynamically allocated array
   // that the Vector object manages.
-  [[nodiscard]] std::string* Data();
+  [[nodiscard]] std::string *Data();
 
   // Returns the current capacity of the Vector
   [[nodiscard]] size_t Capacity() const;
@@ -74,7 +74,7 @@ class Vector {
   // are copied to the new storage.
   //
   // For our implmentation, you should double the capacity when you reallocate.
-  void PushBack(const std::string& element);
+  void PushBack(const std::string &element);
 
   // removes the value from the end of the Vector and returns it.
   // If there are no elemennts in the Vector, then it returns std::nullopt
@@ -85,16 +85,16 @@ class Vector {
   // throws an `out_of_range` exception.
   //
   // Indexes start at 0, just as they do in a normal array.
-  [[nodiscard]] std::string& operator[](size_t index);
-  [[nodiscard]] const std::string& operator[](size_t index) const;
+  [[nodiscard]] std::string &operator[](size_t index);
+  [[nodiscard]] const std::string &operator[](size_t index) const;
 
   // Returns a reference to the value at the specified index
   // If the index is out of the bounds of the array, then it
   // throws an `out_of_range` exception.
   //
   // Indexes start at 0, just as they do in a normal array.
-  [[nodiscard]] std::string& At(size_t index);
-  [[nodiscard]] const std::string& At(size_t index) const;
+  [[nodiscard]] std::string &At(size_t index);
+  [[nodiscard]] const std::string &At(size_t index) const;
 
   // Given an index and a value, inserts the specified value at the specified
   // index in the Vector. This extends the existing Vector to insert the
@@ -118,7 +118,7 @@ class Vector {
   // then it throws an `out_of_range` exception.
   //
   // Returns the index of the newly inserted element
-  size_t Insert(size_t index, const std::string& element);
+  size_t Insert(size_t index, const std::string &element);
 
   // Given an index, erases the value at the specified index
   // This means the length of the Vector decreases and any elements past
@@ -135,16 +135,16 @@ class Vector {
   // within the Vector. If the target cannot be found, then -1 is returned.
   //
   // Returns the index of the target or  -1 if not found.
-  [[nodiscard]] ssize_t Find(const std::string& target) const;
+  [[nodiscard]] ssize_t Find(const std::string &target) const;
 
   // Given a string, returns the whether or not it can be found out
   // within the Vector.
   //
   // Returns true iff the target can be found, false otherwise.
-  [[nodiscard]] bool Contains(const std::string& target) const;
+  [[nodiscard]] bool Contains(const std::string &target) const;
 
- private:
-  std::string* m_data;
+private:
+  std::string *m_data;
   size_t m_length;
   size_t m_capacity;
 
