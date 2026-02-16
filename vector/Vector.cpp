@@ -7,36 +7,42 @@
 
 // TODO: finish the rest
 Vector::Vector()
-    : m_data{new std::string[k_default_capacity]}, m_length{0},
+    : m_data{new std::string[k_default_capacity]},
+      m_length{0},
       m_capacity{k_default_capacity} {}
 
 Vector::Vector(size_t initial_capacity)
-    : m_data{new std::string[initial_capacity]}, m_length{0},
+    : m_data{new std::string[initial_capacity]},
+      m_length{0},
       m_capacity{initial_capacity} {}
 
-Vector::Vector(const Vector &other)
-    : m_data{new std::string[other.m_capacity]}, m_length{other.m_length},
+Vector::Vector(const Vector& other)
+    : m_data{new std::string[other.m_capacity]},
+      m_length{other.m_length},
       m_capacity{other.m_capacity} {
   for (size_t i{0}; i < m_length; ++i) {
     m_data[i] = other.m_data[i];
   }
 }
 
-Vector::Vector(Vector &&other) noexcept
-    : m_data{other.m_data}, m_length{other.m_length},
+Vector::Vector(Vector&& other) noexcept
+    : m_data{other.m_data},
+      m_length{other.m_length},
       m_capacity{other.m_capacity} {
   other.m_data = nullptr;
   other.m_length = 0;
   other.m_capacity = 0;
 }
 
-Vector::~Vector() { delete[] m_data; }
+Vector::~Vector() {
+  delete[] m_data;
+}
 
 // --- Assignment Operators ---
 
-Vector &Vector::operator=(const Vector &other) {
+Vector& Vector::operator=(const Vector& other) {
   if (this != &other) {
-    std::string *new_data{new std::string[other.m_capacity]};
+    std::string* new_data{new std::string[other.m_capacity]};
     for (size_t i{0}; i < other.m_length; ++i) {
       new_data[i] = other.m_data[i];
     }
@@ -48,7 +54,7 @@ Vector &Vector::operator=(const Vector &other) {
   return *this;
 }
 
-Vector &Vector::operator=(Vector &&other) noexcept {
+Vector& Vector::operator=(Vector&& other) noexcept {
   if (this != &other) {
     delete[] m_data;
     m_data = other.m_data;
@@ -64,11 +70,17 @@ Vector &Vector::operator=(Vector &&other) noexcept {
 
 // --- Accessors ---
 
-size_t Vector::Length() const { return m_length; }
+size_t Vector::Length() const {
+  return m_length;
+}
 
-size_t Vector::Capacity() const { return m_capacity; }
+size_t Vector::Capacity() const {
+  return m_capacity;
+}
 
-std::string *Vector::Data() { return m_data; }
+std::string* Vector::Data() {
+  return m_data;
+}
 
 // --- Modifiers ---
 
@@ -77,7 +89,7 @@ void Vector::Reserve(size_t new_cap) {
     return;
   }
 
-  std::string *new_data{new std::string[new_cap]};
+  std::string* new_data{new std::string[new_cap]};
   if (new_data != nullptr && new_cap >= m_length) {
     for (size_t i{0}; i < m_length; ++i) {
       // Use std::move to avoid expensive string copies during reallocation
@@ -90,7 +102,7 @@ void Vector::Reserve(size_t new_cap) {
   m_capacity = new_cap;
 }
 
-void Vector::PushBack(const std::string &element) {
+void Vector::PushBack(const std::string& element) {
   if (m_length >= m_capacity) {
     const size_t next_cap{(m_capacity == 0) ? 1 : m_capacity * 2};
     Reserve(next_cap);
@@ -110,28 +122,28 @@ std::optional<std::string> Vector::PopBack() {
 
 // --- Indexing ---
 
-std::string &Vector::operator[](size_t index) {
+std::string& Vector::operator[](size_t index) {
   if (index >= m_length) {
     throw std::out_of_range{"Vector::operator[] index out of range"};
   }
   return m_data[index];
 }
 
-const std::string &Vector::operator[](size_t index) const {
+const std::string& Vector::operator[](size_t index) const {
   if (index >= m_length) {
     throw std::out_of_range{"Vector::operator[] index out of range"};
   }
   return m_data[index];
 }
 
-std::string &Vector::At(size_t index) {
+std::string& Vector::At(size_t index) {
   if (index >= m_length) {
     throw std::out_of_range{"Vector::At index out of range"};
   }
   return m_data[index];
 }
 
-const std::string &Vector::At(size_t index) const {
+const std::string& Vector::At(size_t index) const {
   if (index >= m_length) {
     throw std::out_of_range{"Vector::At index out of range"};
   }
@@ -140,7 +152,7 @@ const std::string &Vector::At(size_t index) const {
 
 // --- Advanced Operations ---
 
-size_t Vector::Insert(size_t index, const std::string &element) {
+size_t Vector::Insert(size_t index, const std::string& element) {
   if (index > m_length) {
     throw std::out_of_range{"Vector::Insert index out of range"};
   }
@@ -175,13 +187,12 @@ size_t Vector::Erase(size_t index) {
 
   m_length--;
   if (deleting_last) {
-
     return (index == 0) ? 0 : index - 1;
   }
   return index;
 }
 
-ssize_t Vector::Find(const std::string &target) const {
+ssize_t Vector::Find(const std::string& target) const {
   for (size_t i{0}; i < m_length; ++i) {
     if (m_data[i] == target) {
       return static_cast<ssize_t>(i);
@@ -190,6 +201,6 @@ ssize_t Vector::Find(const std::string &target) const {
   return -1;
 }
 
-bool Vector::Contains(const std::string &target) const {
+bool Vector::Contains(const std::string& target) const {
   return Find(target) != -1;
 }
