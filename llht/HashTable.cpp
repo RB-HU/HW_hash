@@ -125,37 +125,24 @@ bool HashTable_Insert(HashTable* table,
 
     if (curr_kv->hash == newkeyvalue.hash &&
         table->key_cmp_fn(curr_kv->key, newkeyvalue.key)) {
+      *oldkeyvalue = *curr_kv;
       found = true;
-      found_kv = curr_kv;
+      LLIterator_Remove(chain_iter, LLNoOpDelete);
+      delete curr_kv;
       break;
     }
     LLIterator_Next(chain_iter);
   }
   LLIterator_Delete(chain_iter);
+  HTKeyValue_t* kv_copy = new HTKeyValue_t;
+  *kv_copy = newkeyvalue;
+  LinkedList_Append(chain, reinterpret_cast<LLPayload_t>(kv_copy));
   if (found) {
-    *oldkeyvalue = *found_kv;
-    HTKeyValue_t* kv_copy = new HTKeyValue_t;
-    *kv_copy = newkeyvalue;
-    LLIterator* replace_iter = LLIterator_New(chain);
-    while (LLIterator_IsValid(replace_iter)) {
-      HTKeyValue_t* curr_kv;
-      LLIterator_Get(replace_iter, reinterpret_cast<LLPayload_t*>(&curr_kv));
-      if (curr_kv == found_kv) {
-        LLIterator_Remove(replace_iter, nullptr);
-        LinkedList_Append(chain, reinterpret_cast<LLPayload_t>(kv_copy));
-        break;
-      }
-      LLIterator_Next(replace_iter);
-    }
-    LLIterator_Delete(replace_iter);
     return true;
   } else {
-    HTKeyValue_t* kv_copy = new HTKeyValue_t;
-    *kv_copy = newkeyvalue;
-    LinkedList_Append(chain, reinterpret_cast<LLPayload_t>(kv_copy));
     table->num_elements++;
-    return false;
-  }  // you may need to change this return value
+    return false; // you may need to change this return value
+  }
 }
 
 bool HashTable_Find(HashTable* table,
@@ -198,7 +185,8 @@ bool HashTable_Remove(HashTable* table,
     if (curr_kv->hash == hash && table->key_cmp_fn(curr_kv->key, key)) {
       found = true;
       *keyvalue = *curr_kv;
-      LLIterator_Remove(iter, nullptr);
+      LLIterator_Remove(iter, LLNoOpDelete);
+      delete curr_kv;
       table->num_elements--;
       break;
     }

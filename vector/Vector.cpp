@@ -180,15 +180,14 @@ size_t Vector::Erase(size_t index) {
   }
 
   // Shift elements down to fill the gap
-  const bool deleting_last = (index == m_length - 1);
   for (size_t i{index}; i < m_length - 1; ++i) {
     m_data[i] = m_data[i + 1];
   }
 
   m_length--;
-  if (deleting_last) {
-    return (index == 0) ? 0 : index - 1;
-  }
+  if (index == m_length ) {
+    return index - 1;
+  } 
   return index;
 }
 
