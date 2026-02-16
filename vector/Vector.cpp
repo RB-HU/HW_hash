@@ -185,9 +185,9 @@ size_t Vector::Erase(size_t index) {
   }
 
   m_length--;
-  if (index == m_length ) {
+  if (index == m_length) {
     return index - 1;
-  } 
+  }
   return index;
 }
 
