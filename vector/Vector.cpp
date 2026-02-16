@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "Vector.hpp"
-#include <optionmal>
+#include <optional>
 #include <string>
 
 // TODO: add the include for corresponding hpp
