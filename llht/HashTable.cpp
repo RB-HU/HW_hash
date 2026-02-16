@@ -117,7 +117,6 @@ bool HashTable_Insert(HashTable* table,
   // all that logic inside here. You might also find that your helper
   // can be reused in steps 2 and 3.
   bool found = false;
-  HTKeyValue_t* found_kv = nullptr;
   LLIterator* chain_iter = LLIterator_New(chain);
   while (LLIterator_IsValid(chain_iter)) {
     HTKeyValue_t* curr_kv;
@@ -141,7 +140,7 @@ bool HashTable_Insert(HashTable* table,
     return true;
   } else {
     table->num_elements++;
-    return false; // you may need to change this return value
+    return false;  // you may need to change this return value
   }
 }
 
