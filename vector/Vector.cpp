@@ -1,6 +1,6 @@
 #include <stdexcept>
 #include "Vector.hpp"
-#include <utility>
+#include <optionmal>
 #include <string>
 
 // TODO: add the include for corresponding hpp
@@ -92,7 +92,7 @@ void Vector::Reserve(size_t new_cap) {
   std::string* new_data{new std::string[new_cap]};
   for (size_t i{0}; i < m_length; ++i) {
     // Use std::move to avoid expensive string copies during reallocation
-    new_data[i] = std::move(m_data[i]);
+    new_data[i] = m_data[i];
   }
 
   delete[] m_data;
@@ -113,7 +113,7 @@ std::optional<std::string> Vector::PopBack() {
   if (m_length == 0) {
     return std::nullopt;
   }
-  std::string last_element{std::move(m_data[m_length - 1])};
+  std::string last_element{m_data[m_length - 1]};
   m_length--;
   return last_element;
 }
@@ -162,7 +162,7 @@ size_t Vector::Insert(size_t index, const std::string& element) {
 
   // Shift elements up to make room for the new element
   for (size_t i{m_length}; i > index; --i) {
-    m_data[i] = std::move(m_data[i - 1]);
+    m_data[i] = m_data[i - 1];
   }
 
   m_data[index] = element;
@@ -178,7 +178,7 @@ size_t Vector::Erase(size_t index) {
   // Shift elements down to fill the gap
   bool deleting_last = (index == m_length - 1);
   for (size_t i{index}; i < m_length - 1; ++i) {
-    m_data[i] = std::move(m_data[i + 1]);
+    m_data[i] = m_data[i + 1];
   }
 
   m_length--;
