@@ -7,7 +7,6 @@
 // LinkedList implementation.
 
 LinkedList* LinkedList_New() {
-  // record structure.
   LinkedList* list = new LinkedList;
   if (list == nullptr) {
     return nullptr;
@@ -16,31 +15,22 @@ LinkedList* LinkedList_New() {
   list->head = nullptr;
   list->tail = nullptr;
   return list;
-
-  // you may want to change this
 }
 
 void LinkedList_Delete(LinkedList* list,
                        LLPayloadFreeFnPtr payload_free_function) {
-  // (using the payload_free_function supplied as an argument) and
-  // the nodes themselves.
-
-  // delete the LinkedList
   if (list == nullptr) {
     return;
   }
-
   LinkedListNode* curr = list->head;
   while (curr != nullptr) {
     LinkedListNode* nxt = curr->next;
-
     if (payload_free_function != nullptr) {
       payload_free_function(curr->payload);
     }
     delete curr;
     curr = nxt;
   }
-
   delete list;
 }
 
@@ -69,17 +59,11 @@ void LinkedList_Push(LinkedList* list, LLPayload_t payload) {
 }
 
 bool LinkedList_Pop(LinkedList* list, LLPayload_t* payload_ptr) {
-  // and empty list and fail. If the list is non-empty, there
-  // are two cases to consider: (a) a list with a single element in it
-  // and (b) the general case of a list with >=2 elements in it.
-  // Be sure to call delete to deallocate the memory that was
-  // previously allocated by LinkedList_Push().
   if (list == nullptr || list->head == nullptr) {
     return false;
   }
   LinkedListNode* to_remove = list->head;
   *payload_ptr = to_remove->payload;
-
   list->head = to_remove->next;
   if (list->head != nullptr) {
     list->head->prev = nullptr;
@@ -88,12 +72,10 @@ bool LinkedList_Pop(LinkedList* list, LLPayload_t* payload_ptr) {
   }
   delete to_remove;
   list->num_elements--;
-  return true;  // you may need to change this return value
+  return true;
 }
 
 void LinkedList_Append(LinkedList* list, LLPayload_t payload) {
-  // LinkedList_Push, but obviously you need to add to the end
-  // instead of the beginning.
   if (list == nullptr) {
     return;
   }
@@ -104,13 +86,11 @@ void LinkedList_Append(LinkedList* list, LLPayload_t payload) {
   new_node->payload = payload;
   new_node->next = nullptr;
   new_node->prev = list->tail;
-
   if (list->tail != nullptr) {
     list->tail->next = new_node;
   } else {
     list->head = new_node;
   }
-
   list->tail = new_node;
   list->num_elements++;
 }
@@ -129,7 +109,7 @@ bool LinkedList_Slice(LinkedList* list, LLPayload_t* payload_ptr) {
   }
   delete to_remove;
   list->num_elements--;
-  return true;  // you may need to change this return value
+  return true;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -145,7 +125,7 @@ LLIterator* LLIterator_New(LinkedList* list) {
   }
   iter->list = list;
   iter->node = list->head;
-  return iter;  // you may want to change this
+  return iter;
 }
 
 // implemented for you
@@ -157,16 +137,15 @@ bool LLIterator_IsValid(LLIterator* iter) {
   if (iter == nullptr) {
     return false;
   }
-  return iter->node != nullptr;  // you may want to change this
+  return iter->node != nullptr;
 }
 
 bool LLIterator_Next(LLIterator* iter) {
-  // you succeed and are now on a new node, false otherwise
   if (iter == nullptr || iter->node == nullptr) {
     return false;
   }
   iter->node = iter->node->next;
-  return iter->node != nullptr;  // you may need to change this return value
+  return iter->node != nullptr;
 }
 
 void LLIterator_Get(LLIterator* iter, LLPayload_t* payload) {
@@ -178,17 +157,6 @@ void LLIterator_Get(LLIterator* iter, LLPayload_t* payload) {
 
 bool LLIterator_Remove(LLIterator* iter,
                        LLPayloadFreeFnPtr payload_free_function) {
-  // complex function you'll build. There are several cases
-  // to consider:
-  // - degenerate case: the list becomes empty after deleting.
-  // - degenerate case: iter points at head
-  // - degenerate case: iter points at tail
-  // - fully general case: iter points in the middle of a list,
-  //   and you have to "splice".
-  //
-  // Be sure to call the payload_free_function to deallocate the payload
-  // the iterator is pointing to, and also deallocate any LinkedList
-  // data structure element as appropriate.
   if (iter == nullptr || iter->node == nullptr) {
     return false;
   }
@@ -212,7 +180,6 @@ bool LLIterator_Remove(LLIterator* iter,
   delete to_remove;
   list->num_elements--;
   return list->head != nullptr;
-  // you may need to change this return value
 }
 
 // Implemented for you

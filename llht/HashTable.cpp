@@ -133,12 +133,7 @@ bool HashTable_Insert(HashTable* table,
   const size_t bucket = HashKeyToBucketNum(table, newkeyvalue.hash);
   LinkedList* chain = table->buckets[bucket];
 
-  // STEP 1: finish the implementation of InsertHashTable.
-  // This is a fairly complex task, so you might decide you want
-  // to define/implement a helper function that helps you find
   // and optionally remove a key within a chain, rather than putting
-  // all that logic inside here. You might also find that your helper
-  // can be reused in steps 2 and 3.
   // Use helper to find if key already exists in the chain
   HTKeyValue_t* existing = nullptr;
   LLIterator* chain_iter = FindInChain(chain, newkeyvalue.hash, newkeyvalue.key,
@@ -238,7 +233,6 @@ void HTIterator_Delete(HTIterator* iter) {
 }
 
 bool HTIterator_IsValid(HTIterator* iter) {
-  // STEP 4: implement HTIterator_IsValid.
   if (iter == nullptr) {
     return false;
   }
@@ -246,11 +240,9 @@ bool HTIterator_IsValid(HTIterator* iter) {
     return false;
   }
   return LLIterator_IsValid(iter->bucket_it);
-  // you may need to change this return value
 }
 
 bool HTIterator_Next(HTIterator* iter) {
-  // STEP 5: implement HTIterator_Next.
   if (iter == nullptr) {
     return false;
   }
@@ -272,11 +264,9 @@ bool HTIterator_Next(HTIterator* iter) {
   }
   iter->bucket_idx = k_invalid_index;
   return false;
-  // you may need to change this return value
 }
 
 bool HTIterator_Get(HTIterator* iter, HTKeyValue_t* keyvalue) {
-  // STEP 6: implement HTIterator_Get.
   if (!HTIterator_IsValid(iter)) {
     return false;
   }
@@ -284,7 +274,6 @@ bool HTIterator_Get(HTIterator* iter, HTKeyValue_t* keyvalue) {
   LLIterator_Get(iter->bucket_it, reinterpret_cast<LLPayload_t*>(&kv));
   *keyvalue = *kv;
   return true;
-  // you may need to change this return value
 }
 
 // Implemented for you
